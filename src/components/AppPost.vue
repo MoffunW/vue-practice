@@ -10,16 +10,20 @@
         <button class="post__img-read">Read article</button>
       </div>
     </div>
-    <div class="post__title">Title</div>
+    <div class="post__title">
+      {{ post.title ? post.title : "Post title here..." }}
+    </div>
     <div class="post__subtitle">
-      subtitle Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea porro
-      modi officia dolorem aliquid voluptateadipisicing elit. Ea porro modi
-      officia dolorem aliquid voluptate
+      {{ post.text ? post.text : "Post text here..." }}
     </div>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  props: {
+    post: Object,
+  },
+};
 </script>
 <style lang="scss">
 .post {
@@ -77,11 +81,23 @@ export default {};
     margin-bottom: 15px;
     font-size: 27px;
     font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: wrap;
+    overflow: hidden;
+    // text-align: left;
   }
   &__subtitle {
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
     font-size: 16px;
     line-height: 25px;
     font-weight: 400;
+    // text-align: left;
   }
 }
 </style>
