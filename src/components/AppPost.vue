@@ -29,26 +29,32 @@ export default {
 .post {
   display: flex;
   flex-direction: column;
+  justify-content: start;
   align-items: center;
   position: relative;
   background: #fff;
   border-radius: 15px;
-  height: 400px;
+  max-height: 400px;
+  height: 100%;
   width: 300px;
   padding: 15px;
   &__image {
     display: block;
     border-radius: 15px;
     max-width: 100%;
-    max-height: 100%;
+    max-height: 120px;
     object-fit: fill;
 
     &-placeholder {
-      height: 150px;
+      // height: 150px;
+    }
+    &-container {
+      background: red;
     }
 
     &-wrapper {
       position: relative;
+      max-height: 120px;
       margin-bottom: 25px;
       &:hover {
         .post__image-overlay {
@@ -85,14 +91,28 @@ export default {
     }
   }
   &__title {
+    max-width: 275px;
     margin-bottom: 15px;
     font-size: 27px;
     font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    overflow-wrap: break-word;
   }
   &__subtitle {
+    max-width: 275px;
     font-size: 16px;
     line-height: 25px;
     font-weight: 400;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    overflow-wrap: break-word;
   }
 }
 </style>

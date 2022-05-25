@@ -21,6 +21,14 @@
         />
         <div class="new-post__image-preview">
           <div class="new-post__image-container">
+            <!-- <img
+              v-for="(image, indx) in this.images"
+              :key="indx"
+              :src="image"
+              alt="image"
+              class="new-post__image"
+            /> -->
+
             <img
               v-if="imageUrl"
               class="new-post__image"
@@ -32,21 +40,25 @@
               <div>Upload image to see preview</div>
             </div>
           </div>
-          <label class="new-post__file-custom new-post__button" for="post__file"
-            ><img src="../assets/attachImage.svg" alt="attach image"
-          /></label>
-          <input
-            id="post__file"
-            class="new-post__file"
-            type="file"
-            name="myImage"
-            accept="image/*"
-            @change="onFilePicked"
-            multiple
-          />
-          <button @click.prevent class="new-post__button">
-            <img src="../assets/send.svg" alt="send" />
-          </button>
+          <div class="new-post__buttons">
+            <label
+              class="new-post__file-custom new-post__button"
+              for="post__file"
+              ><img src="../assets/attachImage.svg" alt="attach image"
+            /></label>
+            <input
+              id="post__file"
+              class="new-post__file"
+              type="file"
+              name="myImage"
+              accept="image/*"
+              @change="onFilePicked"
+              multiple
+            />
+            <button @click.prevent class="new-post__button">
+              <img src="../assets/send.svg" alt="send" />
+            </button>
+          </div>
         </div>
       </form>
       <div class="new-post__preview">
@@ -66,11 +78,11 @@ export default {
   data() {
     return {
       imageUrl: "",
+      images: [],
       post: {
         title: "",
         text: "",
         image: null,
-        images: [],
       },
     };
   },
@@ -85,10 +97,12 @@ export default {
       const fileReader = new FileReader();
       fileReader.addEventListener("load", () => {
         this.imageUrl = fileReader.result;
+        // this.images.push(this.imageUrl);
         console.log(this.imageUrl, "hello");
       });
       fileReader.readAsDataURL(files[0]);
-      this.image = files[0];
+      this.images = files[0];
+      // console.log(this.images, "wtf");
     },
   },
 };
@@ -105,7 +119,12 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-self: center;
+    background: #fdd76d;
+    padding: 25px;
     width: 100%;
+    border-radius: 25px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     & > label {
       text-align: left;
       margin-bottom: 10px;
@@ -115,10 +134,10 @@ export default {
     height: 40px;
     margin-bottom: 30px;
     padding: 0 30px;
-    border: none;
+    border: 1px transparent solid;
     border-radius: 15px;
     &:focus {
-      outline: 0.2px red solid;
+      outline: 0.2px rgb(111, 124, 241) solid;
     }
   }
   &__subtitle {
@@ -176,6 +195,7 @@ export default {
   }
 
   &__file-custom {
+    margin-bottom: 20px;
   }
   &__button {
     display: flex;
@@ -183,10 +203,11 @@ export default {
     justify-content: center;
     height: 40px;
     width: 70px;
-    background: rgb(139, 219, 146);
+    background: #ffffff;
     border-radius: 15px;
     border: none;
     transition: 0.2s linear all;
+
     cursor: pointer;
     &:hover {
       background: rgb(96, 204, 105);
@@ -195,6 +216,16 @@ export default {
       height: 25px;
       width: 30px;
     }
+  }
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+  }
+  &__preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>
