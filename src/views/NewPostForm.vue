@@ -9,7 +9,7 @@
           id="post_title"
           name="post_subtitle"
           type="text"
-          v-model="post.title"
+          v-model.trim="post.title"
         />
         <label for="post_subtitle">Article Text</label>
         <textarea
@@ -17,7 +17,7 @@
           id="post_subtitle"
           name="post_subtitle"
           type="text"
-          v-model="post.text"
+          v-model.trim="post.text"
         />
         <div class="new-post__image-preview">
           <div class="new-post__image-container">
@@ -26,7 +26,7 @@
               <div class="new-post__delete-image" @click="deleteImage">X</div>
             </div>
 
-            <div v-else class="new-post__image-placeholder">
+            <div v-else @click="onUpload" class="new-post__image-placeholder">
               <img src="../assets/upload.svg" alt="upload" />
               <div>Upload image to see preview</div>
             </div>
@@ -44,6 +44,7 @@
               name="myImage"
               accept="image/*"
               @change="onFilePicked"
+              ref="upload"
             />
             <button @click.prevent class="new-post__button">
               <img src="../assets/send.svg" alt="send" />
@@ -96,6 +97,9 @@ export default {
     deleteImage() {
       this.image = null;
       this.imageUrl = "";
+    },
+    onUpload() {
+      this.$refs.upload.click();
     },
   },
 };
@@ -179,6 +183,7 @@ export default {
       border-radius: 25px;
     }
     &-placeholder {
+      cursor: pointer;
       & > img {
         height: 40px;
         width: 50px;
