@@ -2,11 +2,13 @@
   <div class="post">
     <div class="post__image-wrapper">
       <div class="post__image-placeholder">
-        <img v-if="imageUrl" class="post__image" :src="imageUrl" alt="post" />
+        <div v-if="imageUrl" class="post__imagee">
+          <img class="post__image" :src="imageUrl" alt="post" />
+          <div class="post__image-overlay">
+            <button class="post__image-read">Read article</button>
+          </div>
+        </div>
         <div v-else class="post__image-container"></div>
-      </div>
-      <div class="post__image-overlay">
-        <button class="post__image-read">Read article</button>
       </div>
     </div>
     <div class="post__title">
@@ -34,15 +36,17 @@ export default {
   position: relative;
   background: #fff;
   border-radius: 15px;
-  max-height: 400px;
-  height: 100%;
+  max-height: 480px;
+  min-height: 200px;
   width: 300px;
-  padding: 15px;
+  padding: 15px 15px 30px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   &__image {
     display: block;
     border-radius: 15px;
-    max-width: 100%;
-    max-height: 120px;
+    width: 100%;
+    max-height: 160px;
     object-fit: fill;
 
     &-placeholder {
@@ -54,18 +58,18 @@ export default {
 
     &-wrapper {
       position: relative;
-      max-height: 120px;
+      max-height: 160px;
       margin-bottom: 25px;
       &:hover {
         .post__image-overlay {
-          display: block;
+          opacity: 1;
           background: rgba(44, 44, 44, 0.5);
         }
       }
     }
 
     &-overlay {
-      display: none;
+      opacity: 0;
       position: absolute;
       width: 100%;
       height: 100%;
@@ -75,7 +79,7 @@ export default {
       transition: 0.3s linear all;
       border-radius: 15px;
       z-index: 10;
-      // transition: all 0.4s linear;
+      transition: all 0.1s linear;
     }
     &-read {
       position: absolute;

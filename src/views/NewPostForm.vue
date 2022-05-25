@@ -21,20 +21,11 @@
         />
         <div class="new-post__image-preview">
           <div class="new-post__image-container">
-            <!-- <img
-              v-for="(image, indx) in this.images"
-              :key="indx"
-              :src="image"
-              alt="image"
-              class="new-post__image"
-            /> -->
+            <div v-if="imageUrl" class="new-post__smth">
+              <img class="new-post__image" :src="imageUrl" alt="placeholder" />
+              <div class="new-post__delete-image" @click="deleteImage">X</div>
+            </div>
 
-            <img
-              v-if="imageUrl"
-              class="new-post__image"
-              :src="imageUrl"
-              alt="placeholder"
-            />
             <div v-else class="new-post__image-placeholder">
               <img src="../assets/upload.svg" alt="upload" />
               <div>Upload image to see preview</div>
@@ -53,7 +44,6 @@
               name="myImage"
               accept="image/*"
               @change="onFilePicked"
-              multiple
             />
             <button @click.prevent class="new-post__button">
               <img src="../assets/send.svg" alt="send" />
@@ -97,12 +87,15 @@ export default {
       const fileReader = new FileReader();
       fileReader.addEventListener("load", () => {
         this.imageUrl = fileReader.result;
-        // this.images.push(this.imageUrl);
         console.log(this.imageUrl, "hello");
       });
       fileReader.readAsDataURL(files[0]);
-      this.images = files[0];
-      // console.log(this.images, "wtf");
+      this.image = files[0];
+      console.log(files);
+    },
+    deleteImage() {
+      this.image = null;
+      this.imageUrl = "";
     },
   },
 };
@@ -182,7 +175,7 @@ export default {
       flex-direction: column;
       height: 300px;
       width: 400px;
-      background: #fff;
+      background: #fdd76d;
       border-radius: 25px;
     }
     &-placeholder {
@@ -191,6 +184,36 @@ export default {
         width: 50px;
         margin-bottom: 30px;
       }
+    }
+  }
+
+  &__smth {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    &:hover {
+      .new-post__delete-image {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__delete-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: 0.1s opacity linear;
+    cursor: pointer;
+    &:hover {
+      color: red;
     }
   }
 
@@ -210,7 +233,7 @@ export default {
 
     cursor: pointer;
     &:hover {
-      background: rgb(96, 204, 105);
+      background: rgb(212, 212, 212);
     }
     & > img {
       height: 25px;
