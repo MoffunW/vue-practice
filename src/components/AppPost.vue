@@ -1,46 +1,57 @@
 <template>
   <div class="post">
-    <div class="post__img-wrapper">
-      <img
-        class="post__img"
-        src="https://via.placeholder.com/650x250"
-        alt="post"
-      />
-      <div class="post__img-overlay">
-        <button class="post__img-read">Read article</button>
+    <div class="post__image-wrapper">
+      <div class="post__image-placeholder">
+        <img v-if="imageUrl" class="post__image" :src="imageUrl" alt="post" />
+        <div v-else class="post__image-container"></div>
+      </div>
+      <div class="post__image-overlay">
+        <button class="post__image-read">Read article</button>
       </div>
     </div>
-    <div class="post__title">Title</div>
+    <div class="post__title">
+      {{ post.title ? post.title : "Post Title here..." }}
+    </div>
     <div class="post__subtitle">
-      subtitle Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea porro
-      modi officia dolorem aliquid voluptateadipisicing elit. Ea porro modi
-      officia dolorem aliquid voluptate
+      {{ post.text ? post.text : "Post Text here..." }}
     </div>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  props: {
+    post: Object,
+    imageUrl: String,
+  },
+};
 </script>
 <style lang="scss">
 .post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
   background: #fff;
   border-radius: 15px;
   height: 400px;
   width: 300px;
   padding: 15px;
-  &__img {
+  &__image {
     display: block;
     border-radius: 15px;
-    width: 100%;
-    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: fill;
+
+    &-placeholder {
+      height: 150px;
+    }
 
     &-wrapper {
       position: relative;
       margin-bottom: 25px;
       &:hover {
-        .post__img-overlay {
+        .post__image-overlay {
           display: block;
           background: rgba(44, 44, 44, 0.5);
         }

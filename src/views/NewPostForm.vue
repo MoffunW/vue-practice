@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h2>This is an new-post page</h2>
+    <h2 class="content__title">This is an new-post page</h2>
     <div class="new-post">
       <form class="new-post__form">
         <label for="post_title">Article Title</label>
@@ -9,6 +9,7 @@
           id="post_title"
           name="post_subtitle"
           type="text"
+          v-model="post.title"
         />
         <label for="post_subtitle">Article Text</label>
         <textarea
@@ -16,21 +17,40 @@
           id="post_subtitle"
           name="post_subtitle"
           type="text"
+          v-model="post.text"
         />
         <div class="new-post__image-preview">
-          <img src="https://via.placeholder.com/250x150" alt="placeholder" />
-          <label class="new-post__file-custom" for="post__file">{{}}</label>
+          <div class="new-post__image-container">
+            <img
+              v-if="imageUrl"
+              class="new-post__image"
+              :src="imageUrl"
+              alt="placeholder"
+            />
+            <div v-else class="new-post__image-placeholder">
+              <img src="../assets/upload.svg" alt="upload" />
+              <div>Upload image to see preview</div>
+            </div>
+          </div>
+          <label class="new-post__file-custom new-post__button" for="post__file"
+            ><img src="../assets/attachImage.svg" alt="attach image"
+          /></label>
           <input
             id="post__file"
             class="new-post__file"
             type="file"
             name="myImage"
             accept="image/*"
+            @change="onFilePicked"
+            multiple
           />
+          <button @click.prevent class="new-post__button">
+            <img src="../assets/send.svg" alt="send" />
+          </button>
         </div>
       </form>
       <div class="new-post__preview">
-        <AppPost />
+        <AppPost :post="post" :imageUrl="imageUrl" />
       </div>
     </div>
   </div>
@@ -38,11 +58,38 @@
 
 <script>
 import AppPost from "../components/AppPost.vue";
-// import { mdiAttachment } from "@mdi/js";
 
 export default {
   components: {
     AppPost,
+  },
+  data() {
+    return {
+      imageUrl: "",
+      post: {
+        title: "",
+        text: "",
+        image: null,
+        images: [],
+      },
+    };
+  },
+
+  methods: {
+    onFilePicked(event) {
+      const files = event.target.files;
+      let filename = files[0].name;
+      if (filename.lastIndexOf(".") <= 0) {
+        return alert("Please add a valid file!");
+      }
+      const fileReader = new FileReader();
+      fileReader.addEventListener("load", () => {
+        this.imageUrl = fileReader.result;
+        console.log(this.imageUrl, "hello");
+      });
+      fileReader.readAsDataURL(files[0]);
+      this.image = files[0];
+    },
   },
 };
 </script>
@@ -100,16 +147,54 @@ export default {
   &__file {
     display: none;
   }
-  &__image-preview {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  &__image {
+    max-width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    &-preview {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    &-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 300px;
+      width: 400px;
+      background: #fff;
+      border-radius: 25px;
+    }
+    &-placeholder {
+      & > img {
+        height: 40px;
+        width: 50px;
+        margin-bottom: 30px;
+      }
+    }
   }
+
   &__file-custom {
+  }
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 40px;
     width: 70px;
-    background: grey;
+    background: rgb(139, 219, 146);
     border-radius: 15px;
+    border: none;
+    transition: 0.2s linear all;
+    cursor: pointer;
+    &:hover {
+      background: rgb(96, 204, 105);
+    }
+    & > img {
+      height: 25px;
+      width: 30px;
+    }
   }
 }
 </style>
