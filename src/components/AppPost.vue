@@ -1,15 +1,21 @@
 <template>
   <div class="post">
-    <div class="post__image-wrapper">
+    <div v-if="post.imageUrl" class="post__image-wrapper">
       <div class="post__image-placeholder">
-        <div v-if="imageUrl" class="post__imagee">
-          <img class="post__image" :src="imageUrl" alt="post" />
+        <div class="post__imagee">
+          <img class="post__image" :src="post.imageUrl" alt="post" />
           <div class="post__image-overlay">
-            <button class="post__image-read">Read article</button>
+            <router-link :to="'article/' + post.id" class="post__image-read"
+              >Read article</router-link
+            >
           </div>
         </div>
-        <div v-else class="post__image-container"></div>
       </div>
+    </div>
+    <div v-else class="post__no-image">
+      <router-link :to="'article/' + post.id" class="post__no-image__link"
+        >Read article</router-link
+      >
     </div>
     <div class="post__title">
       {{ post.title ? post.title : "Post Title here..." }}
@@ -23,7 +29,9 @@
 export default {
   props: {
     post: Object,
-    imageUrl: String,
+  },
+  methods: {
+    openArticle() {},
   },
 };
 </script>
@@ -42,6 +50,11 @@ export default {
   padding: 15px 15px 30px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  &:hover {
+    .post__no-image {
+      display: flex;
+    }
+  }
   &__image {
     display: block;
     border-radius: 15px;
@@ -91,6 +104,7 @@ export default {
       border-radius: 6px;
       background: #0f1516;
       color: #fff;
+      text-decoration: none;
       cursor: pointer;
     }
   }
@@ -117,6 +131,23 @@ export default {
     text-overflow: ellipsis;
     overflow: hidden;
     overflow-wrap: break-word;
+  }
+  &__no-image {
+    display: none;
+    height: 40px;
+    text-decoration: none;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    background: #0f1516;
+    color: #fff;
+    cursor: pointer;
+    order: 1;
+    margin-top: 30px;
+    &__link {
+      color: #fff;
+      text-decoration: none;
+    }
   }
 }
 </style>

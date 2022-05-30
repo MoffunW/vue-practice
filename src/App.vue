@@ -12,6 +12,11 @@ export default {
   components: {
     AppHeader,
   },
+  data() {
+    return {
+      posts: [],
+    };
+  },
 };
 </script>
 

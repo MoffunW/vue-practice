@@ -21,12 +21,20 @@
         />
         <div class="new-post__image-preview">
           <div class="new-post__image-container">
-            <div v-if="imageUrl" class="new-post__smth">
-              <img class="new-post__image" :src="imageUrl" alt="placeholder" />
+            <div v-if="post.imageUrl" class="new-post__smth">
+              <img
+                class="new-post__image"
+                :src="post.imageUrl"
+                alt="placeholder"
+              />
               <div class="new-post__delete-image" @click="deleteImage">X</div>
             </div>
 
-            <div v-else @click="onUpload" class="new-post__image-placeholder">
+            <div
+              v-else
+              @click="onUploadImage"
+              class="new-post__image-placeholder"
+            >
               <img src="../assets/upload.svg" alt="upload" />
               <div>Upload image to see preview</div>
             </div>
@@ -46,14 +54,14 @@
               @change="onFilePicked"
               ref="upload"
             />
-            <button @click.prevent class="new-post__button">
+            <button @click.prevent="onPost" class="new-post__button">
               <img src="../assets/send.svg" alt="send" />
             </button>
           </div>
         </div>
       </form>
       <div class="new-post__preview">
-        <AppPost :post="post" :imageUrl="imageUrl" />
+        <AppPost :post="post" />
       </div>
     </div>
   </div>
@@ -61,6 +69,7 @@
 
 <script>
 import AppPost from "../components/AppPost.vue";
+let nextId = 1;
 
 export default {
   components: {
@@ -68,12 +77,10 @@ export default {
   },
   data() {
     return {
-      imageUrl: "",
-      images: [],
       post: {
         title: "",
         text: "",
-        image: null,
+        imageUrl: "",
       },
     };
   },
@@ -87,8 +94,8 @@ export default {
       }
       const fileReader = new FileReader();
       fileReader.addEventListener("load", () => {
-        this.imageUrl = fileReader.result;
-        console.log(this.imageUrl, "hello");
+        this.post.imageUrl = fileReader.result;
+        console.log(this.post.imageUrl, "hello");
       });
       fileReader.readAsDataURL(files[0]);
       this.image = files[0];
@@ -96,10 +103,20 @@ export default {
     },
     deleteImage() {
       this.image = null;
-      this.imageUrl = "";
+      this.post.imageUrl = "";
     },
-    onUpload() {
+    onUploadImage() {
       this.$refs.upload.click();
+    },
+    onPost() {
+      let post = {
+        id: nextId++,
+        title: this.post.title,
+        text: this.post.text,
+        imageUrl: this.post.imageUrl,
+      };
+      this.$store.dispatch("SAVE_POST", post);
+      console.log("added");
     },
   },
 };
